@@ -1,0 +1,8 @@
+\contentsline {chapter}{\numberline {1}Volatility targeting}{5}{}%
+\contentsline {section}{\numberline {1.1}Unit Risk}{5}{}%
+\contentsline {section}{\numberline {1.2}Volatility targeting in a portfolio}{5}{}%
+\contentsline {subsection}{\numberline {1.2.1}Risk Weights}{5}{}%
+\contentsline {subsection}{\numberline {1.2.2}Cash Weights}{6}{}%
+\contentsline {chapter}{\numberline {2}Systematic backtesting}{7}{}%
+\contentsline {section}{\numberline {2.1}Data layer}{7}{}%
+\contentsline {section}{\numberline {2.2}Portfolio backtest}{7}{}%

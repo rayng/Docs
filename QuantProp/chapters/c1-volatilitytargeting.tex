@@ -1,0 +1,97 @@
+
+\chapter{Volatility targeting}
+\label{ch:voltgt}
+
+Chapter~\ref{ch:voltgt} is about volatility targeting and about sizing trades for a given risk. 
+
+
+\section{Unit Risk}
+\label{sn: unitrisk}
+The inputs would be a percentage risk tolerance and outputs is simply number of units of the asset to but to obtain that risk. First we define funding risk per unit of instrument as:
+
+\begin{equation}
+\label{eq: unitrisk}
+\sigma_{\mathbbm{1},i} = \sigma_{\%,i}X_{t,i}fx_{t,i}
+\end{equation}
+where:
+\begin{description}
+\item[\sigma_{\%,i}] is annual percentage volatility
+\item[X_{t,i}] is asset price
+\item[fx_{t,i}] is fx rate from asset price numeraire to funding numeraire example jpy to usd.
+\end{description}
+Note that estimating the annual percentage volatility can be a separate model on its own but using either ewm std or simple std is typically used. Taking the inverse of Eq.~\ref{eq: unitrisk}, we get:
+\begin{equation}
+\mathbbm{N}_{\mathbbm{1}} = \frac{1}{\sigma_{\mathbbm{1},i}}
+\end{equation}
+where
+\begin{description}
+\item[\mathbbm{N}_{\mathbbm{1}}] is the number of units to purchase to get \$1 of risk.
+\end{description}
+
+\section{Volatility targeting in a portfolio}
+\label{sn: pfvoltgt}
+The point of documenting this is for figuring out how to trade a proper multi factor portfolio.
+
+\subsection{Risk Weights}
+\label{ssn: riskweights}
+This is how to implement it mechanically:
+
+\begin{enumerate}
+
+\item{Obtain AUM for the portfolio: $V(t)$}
+
+\item{Obtain portfolio target volatility: $\sigma_{target}$ and obtain cash volatility target. This is hard coded. Compute daily cash vol:
+\begin{equation}
+\sigma_{target,daily}= \sigma_{target}V(t) / 16 
+\end{equation}
+}
+%\item{Calculate portfolio cash risk weights by multiplying by predefined handcrafted risk weights. A starting point can always be equal risk weights. I call this base weights
+
+\begin{equation}
+\vec{W}_{base, \$ } = \vec{w}_{base, i}   \sigma_{target,daily}
+\end{equation}
+
+\item{Now convert to instrument units:
+
+\begin{equation}
+\vec{N}_{base} = \vec{W}_{base, \$} \mathbbm{N}_{\mathbbm{1}}
+\end{equation}
+
+\item{Finally adjust it using signals. We assume the usual -20 to 20 signal scale:
+\begin{equation}
+\vec{N}_{\alpha} = \vec{N}_{base} S/ 20
+\end{equation}
+}
+\end{enumerate}
+
+
+\subsection{Cash Weights}
+\label{ssn: cashweights}
+We can apply the same methodology to cash weights with the simple modification of not requiring to use unit risks.
+
+
+\begin{enumerate}
+
+\item{Obtain AUM for the portfolio: $V(t)$}
+
+\item{We assume we are given handcrafted cash weights: $W_{\%}$}
+
+\item{We can obtain instrument level cash allocations: 
+
+\begin{equation}
+W_{\$,i} = W_{\%} V(t)
+\end{equation}
+
+}
+
+
+\item{Now convert to instrument units so that:
+
+\begin{equation}
+N_{\%,i} =  W_{\$,i} / X_i
+\end{equation}
+}
+
+\end{enumerate}
+
+Note that the difference in both protocols comes down to the definition of the risk conversion numeraire. It is $\sigma_{\mathbbm{I},i}$ if using risk weights but simply the price: $X_t$ if using cash weights weighting. Trading any portfolio would only require knowledge of the AUM to invest in it. The same also applies for a multifactor portfolio. I would also like to use this to figure out how to trade various rebalancing schedules as a means for diversification.

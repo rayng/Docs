@@ -1,0 +1,64 @@
+\documentclass{book}
+\usepackage{bbm}
+\usepackage{fullpage}
+
+\renewcommand*\descriptionlabel[1]{\hspace\leftmargin$#1$}
+
+\title{Quantitative Proprietary Trading}
+\author{Ray Ng}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\input{chapters/c1-volatilitytargeting.tex}
+\input{chapters/c2-backtesting.tex}
+
+
+\chapter{Systematic backtesting}
+\label{ch:sysbt}
+
+Chapter~\ref{ch:sysbt} is about the implementation of a generic systematic backtester. Note that at the highest level, the system should basically spit out the trades required for the day. This would be a difference between the target portfolio and the current portfolio. Short of an automated trading strategy, the trader is expected to execute faithfully.  
+
+\section{Data layer}
+Here's the vectorized data require and that can be precalculated:
+
+\begin{description}
+\item[X_i(t)] $\equiv$ price data at fixed frequency
+\item[\sigma_{\mathbbm{I}}] $\equiv$ is the unit risk, meaning how many units to buy per \$1 of risk, where the funding units is arbitrary. 
+\item[fx_{i}(t)] $\equiv$ is the fx conversion rate from asset price numeraire to funding numeraire example JPY to USD.
+\item[\Delta PL_{i}(t) \equiv \left(X_{i}(t+1)-X_i(t)\right)] is the daily PL in [DOM] units for longing one unit of $i$
+\item[\Delta PL_{i,\$}(t) \equiv \Delta PL_{i}(t)fx_{i}(t)] is the daily PL in [\$] units for longing one unit of $i$
+\item[\Delta PL_{i,C}(t) \equiv \left( r_{FOR}- r_{DOM} \right)\delta t] is the carry earned for longing one unit of $i$
+\item[\vec{\delta X}(t) \equiv \vec{X}^{bid}(t) -  \vec{X}^{ask}(t)] is the bid ask spread for the portfolio per unit asset traded]
+\item[\vec{\Delta PL}_{tcost}(t) = \vec{N}_{rebalance}(t)\circ \vec{\delta X}(t)/2 \circ \vec{fx}(t).]
+\end{description}
+
+\section{Portfolio backtest}
+Assuming we had a time series of target inventory: $\vec{N}(t)$, then we can compute the daily PL of the portfolio without transaction costs:
+\begin{equation}
+\vec{\Delta PL}(t) = \vec{N}(t-1) \circ \vec{\Delta PL (t)} 
+\end{equation}
+and the portfolio PL is simply given by:
+\begin{equation}
+\Delta PL (t) = \vec{\Delta PL}(t) \circ \vec{\mathbbm{1}}
+\end{equation}
+If we wish to include transaction costs, we need to assume rebalance flow. 
+\begin{equation}
+\vec{N}_{rebalance}(t) = \vec{N(t-1)} - \vec{N(t)}.
+\end{equation}
+then the rebalance transaction cost can be estimated as:
+\begin{equation}
+\vec{\Delta PL}_{tcost}(t) = \vec{N}_{rebalance}(t)\circ \vec{\delta X}(t)/2 \circ \vec{fx}(t).
+\end{equation}
+The full daily PL is then given by:
+\begin{equation}
+\vec{\Delta PL}_{tcost}(t) = \vec{N}_{rebalance}(t)\circ \vec{\delta X}(t)/2 \circ \vec{fx}(t).
+\end{equation}
+
+
+
+
+
+
+
+\end{document}
