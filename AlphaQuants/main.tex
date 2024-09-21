@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage{bbm}
+%\usepackage{fullpage}
+
+\renewcommand*\descriptionlabel[1]{\hspace\leftmargin$#1$}
+
+\title{Alpha Quants Proposal}
+\author{Ray Ng}
+\begin{document}
+\maketitle
+\tableofcontents
+%%%
+
+\abstract{In this document, we discuss the formation of an 'Alpha Quant' which will trade a global macro systematic portfolio using future contracts.}
+
+\section{Introduction}
+When I first joined TD on the FX strategy desk, we had a very rudimentary version of a systematic spot FX portfolio. It was an interesting proof of concept on FX strategy based on academic research which should typically be taken with a healthy dose of skepticism. However, it served its purpose as it provided FX strategy a new way to tell stories to clients. This has always been the priority of FX strategy - story telling. Additionally the code base was hastily written given that it was put together by an intern and as a consequency it took nearly 3-4 hours for signals to be updated. 
+
+My main mandate upon being hired was to maintain the portfolio and to revamp it. I have always been a quant who thinks like a trader and so I rebuilt 'MRSI' from the ground up always with the intention that it could be traded. I developed a brand new framework for constructing trading signals and built all the infrastructure by myself namely production systems for data storage, signal construction and systematic backtesting. I have strong belief that there is alpha in the way we are constructing signals and backtesting the portfolio, which is why it has always been a personal conflict of interest to publish research on our work. 
+
+\section{Vision}
+I plan to build out a global macro systematic program similar to QSR group at Ontario Teachers Pension Plan\footnote{The latter group has an AUM of 2bn trading a myriad of future contracts}. The main thrust of our efforts will be in constructing a fully systematic multi-asset portfolio that will seek exposure to all asset classes namely: 
+\begin{itemize}
+\item FX
+\item Rates
+\item Bonds
+\item Equity
+\item Commodity 
+\item Crypto
+\end{itemize}
+via the \textbf{Futures} market. The portfolio will extract Alpha from this deep market by taking a risk based approach. This means we will target a fixed level of annual risk given an assigned risk limit, a.k.a volatility targeting. The Alpha will come from systematic trading signals that will ultimately adjust the amount of risk the portfolio.
+
+The bulk of the teams' efforts would be spent improving the alpha of the portfolio by expanding our trading universe and finding more predictive trading signals.
+
+
+\section{Resources}
+I require a lean team with 2 additional permanent headcounts and a junior rotator. They must have STEM backgrounds and demonstrate strong development skills.
+\begin{itemize}
+\item 1 Quantitative Researcher - VP level
+\item 1 Quantitative Developer/ Technologist - VP level
+\item 1 Quantitative Analyst. 
+\item 1 intern/ rotator with STEM background
+\end{itemize}
+
+
+
+\section{Proposed Organization Chart}
+Given the asset class coverage, it makes sense for this team to report into both Greg Debienne and Jason Ince. Between both business heads, we have access to all business classes. We could report into the Credit Trading Prop Desk which is also in need of quant help. We could help supervise rotators on their behalf to achieve their needs.
+
+
+\section{A Win For Everyone}
+
+\subsection{Strategy}
+In general, the strategy team has a need for quant resources but not quant visionaries. The business of strategy is heavily focused around story-telling via reports versus taking risk. It's clear then that they do not need idea generation quants but instead quants to execute their vision. Their needs can be met with junior quants and interns and I feel comfortable leaving the team. In FX Strategy for example, Linda has been sufficiently well trained.
+
+%Mark has ambition to lead quant research. We have different visions of quant research and it doesn't make sense to have two different visions. It is only sensible for me to focus on trading instead of being a generalist. In previous renditions of my vision of Quant Research, I wanted to ensure that FX Strategy would not lose suppose. Linda has been adequately trained which will allow Mark to drive the vision through 
+\subsection{Trading}
+\subsubsection{FX Trading}
+No one in the bank is trading futures meaningfully and so it is an untapped space. Given that we only make recommendations to clients and to the desk on spot FX, there isn't a conflict of interest. This also does not compete with other areas of FX business. 
+
+\subsubsection{Credit Trading}
+Our Credit desk is fundamental in nature. It primarily runs a basis package strategy, i.e. simultaneously long the HY bond and the CDS to eliminate default risk. There is strong interest among the team to explore systematic alpha in the credit space. The team has basic needs for quant suppors, which are not being met. We could provide our quant expertise and manage their intern/ rotator for them, thereby filling that need. We could also get access to another asset class to further diversify our portfolio.
+
+
+\subsubsection{Funding}
+Trading futures allows for large margin and there will be no ambiguity in terms of marking the book. It is also a low margin business with some FX contracts offering over 40 times leverage.
+
+\subsubsection{Capacity}
+Futures is a highly liquid space and the strategy will have massive capacity given the amount of asset classes we cover. If successful, I do not see any issues scaling this out to \$1bio of risk.
+
+\subsubsection{Global Client Solutions}
+Mastering the mechanics of futures trading and portfolio rebalancing will be integral in the possibility of a future QIS business lines.
+
+
+\subsubsection{Talent Acquisition}
+TD will have no problem attracting talent with such a quant systematic futures program.
+
+
+
+
+\section{Sub projects}
+\begin{enumerate}
+\item Mid frequency strategies.
+\item Monetizing retail order flow.
+\item Systematic options
+\item Systematic forward trading
+\item Tactical roll yield strategy
+%\item Quantamenta tactical portfolio
+\end{enumerate}
+
+
+%%
+
+
+\end{document}
+%%%%%%

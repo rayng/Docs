@@ -1,0 +1,14 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{}%
+\contentsline {section}{\numberline {2}Vision}{2}{}%
+\contentsline {section}{\numberline {3}Resources}{2}{}%
+\contentsline {section}{\numberline {4}Proposed Organization Chart}{3}{}%
+\contentsline {section}{\numberline {5}A Win For Everyone}{3}{}%
+\contentsline {subsection}{\numberline {5.1}Strategy}{3}{}%
+\contentsline {subsection}{\numberline {5.2}Trading}{3}{}%
+\contentsline {subsubsection}{\numberline {5.2.1}FX Trading}{3}{}%
+\contentsline {subsubsection}{\numberline {5.2.2}Credit Trading}{3}{}%
+\contentsline {subsubsection}{\numberline {5.2.3}Funding}{3}{}%
+\contentsline {subsubsection}{\numberline {5.2.4}Capacity}{3}{}%
+\contentsline {subsubsection}{\numberline {5.2.5}Global Client Solutions}{4}{}%
+\contentsline {subsubsection}{\numberline {5.2.6}Talent Acquisition}{4}{}%
+\contentsline {section}{\numberline {6}Sub projects}{4}{}%
