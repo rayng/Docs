@@ -1,15 +1,53 @@
 \documentclass{article}
 \usepackage{bbm}
-%\usepackage{fullpage}
+\usepackage{fullpage}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{hhline} 
+\usepackage{amsmath}
+
+
+%\hhline{|-----|}
+%\textbf{Team Head} & \cellcolor{red!60}0\% & \cellcolor{pink!60}10\% & \cellcolor{green!60}40\% & \cellcolor{green!60}50\% \\ 
+%\hhline{|-----|}
+%\textbf{Quant Research Primary} & \cellcolor{red!60}0\% & \cellcolor{pink!60}20\% & \cellcolor{green!60}70\% & \cellcolor{pink!60}10\% \\ 
+%\hhline{|-----|}
+%\textbf{Quant Technologist Primary} & \cellcolor{red!60}0\% & \cellcolor{green!60}50\% & \cellcolor{green!60}40\% & \cellcolor{pink!60}10\% \\ 
+%\hhline{|-----|}
+%\textbf{All Interns/Rotators} & \cellcolor{green!60}75\% & \cellcolor{green!60}15\% & \cellcolor{pink!60}10\% & \cellcolor{red!60}0\% \\ 
+%\hhline{|-----|}
+
 
 \renewcommand*\descriptionlabel[1]{\hspace\leftmargin$#1$}
+\newcommand{\SkillSpectrumTable}{
+\begin{table}[ht]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Role /\ Skillset} & \textbf{Data } & \textbf{Technologist} & \textbf{Researcher} & \textbf{PM} \\ 
+\hline
+\textbf{Team Head} & \cellcolor{red!60}0\% & \cellcolor{pink!60}10\% & \cellcolor{green!60}40\% & \cellcolor{green!60}50\% \\ 
+\hline
+\textbf{Quant Research Primary} & \cellcolor{red!60}0\% & \cellcolor{pink!60}20\% & \cellcolor{green!60}70\% & \cellcolor{pink!60}10\% \\ 
+\hline
+\textbf{Quant Technologist Primary} & \cellcolor{red!60}0\% & \cellcolor{green!60}50\% & \cellcolor{green!60}40\% & \cellcolor{pink!60}10\% \\ 
+\hline
+\textbf{All Interns/Rotators} & \cellcolor{green!60}75\% & \cellcolor{green!60}15\% & \cellcolor{pink!60}10\% & \cellcolor{red!60}0\% \\ 
+\hline
+\end{tabular}
+\caption{Skillset break down of Alpha Quant Team}~\label{tb:skillset}
+\end{table}
 
+}
+		
 \title{Alpha Quants Proposal}
 \author{Ray Ng}
+
 \begin{document}
 \maketitle
-\tableofcontents
-%%%
+%\tableofcontents
+
 
 \abstract{In this document, we discuss the formation of an 'Alpha Quant' which will trade a global macro systematic portfolio using future contracts.}
 
@@ -19,7 +57,7 @@ When I first joined TD on the FX strategy desk, we had a very rudimentary versio
 My main mandate upon being hired was to maintain the portfolio and to revamp it. I have always been a quant who thinks like a trader and so I rebuilt 'MRSI' from the ground up always with the intention that it could be traded. I developed a brand new framework for constructing trading signals and built all the infrastructure by myself namely production systems for data storage, signal construction and systematic backtesting. I have strong belief that there is alpha in the way we are constructing signals and backtesting the portfolio, which is why it has always been a personal conflict of interest to publish research on our work. 
 
 \section{Vision}
-I plan to build out a global macro systematic program similar to QSR group at Ontario Teachers Pension Plan\footnote{The latter group has an AUM of 2bn trading a myriad of future contracts}. The main thrust of our efforts will be in constructing a fully systematic multi-asset portfolio that will seek exposure to all asset classes namely: 
+I plan to build out a global macro systematic program similar to QSR group at Ontario Teachers Pension Plan (OTPP) \footnote{The latter group has an AUM of 2bn trading a myriad of future contracts}. The main thrust of our efforts will be in constructing a fully systematic multi-asset portfolio that will seek exposure to all asset classes namely: 
 \begin{itemize}
 \item FX
 \item Rates
@@ -28,12 +66,44 @@ I plan to build out a global macro systematic program similar to QSR group at On
 \item Commodity 
 \item Crypto
 \end{itemize}
-via the \textbf{Futures} market. The portfolio will extract Alpha from this deep market by taking a risk based approach. This means we will target a fixed level of annual risk given an assigned risk limit, a.k.a volatility targeting. The Alpha will come from systematic trading signals that will ultimately adjust the amount of risk the portfolio.
+via the \textbf{Futures} market. The portfolio will extract alpha from this deep market by taking a risk-based approach. This means we will target a fixed level of annual risk given an assigned risk limit, i.e. a volatility targeted portfolio. The alpha will come from systematic trading signals that will ultimately adjust the amount of risk the portfolio.
 
-The bulk of the teams' efforts would be spent improving the alpha of the portfolio by expanding our trading universe and finding more predictive trading signals.
+The bulk of the teams' efforts would be spent improving the alpha of the portfolio by expanding our trading universe and finding more predictive trading signals. Before presenting the needs of the group, it is worthwhile to take a short detour to get an understanding of systematic trading and what it takes to build a successful systematic portfolio.
+
+\section{Primer on Systematic Trading}
+
+In this section we give a high level overview as to why systematic trading works and how to set up a proper framework. We begin by describing a simple intuitive game - the classic coin toss example with symmetric payouts but unequal odds. We then use this to draw analogies to how to build out a systematic program.
+
+\subsection{The Law of Large Numbers}
+Consider a coin toss game where with a biased coin such that there is a 51\% chance of heads and 49\% chance of tails and that heads payouts \$1 and tails  pays out  -\$1. This game has positive edge with an expected payout of $(51\%(\$1) + 49\%(\$-1) = \$0.02$ per flip. So we flip the coin once with a very real possibility of either winning \$1 or losing \$1 despite the game having an expected \$0.02 payout. Imagine that we only had a bank roll of \$4, there there is actually a 5.8\% chance that we flip 4 tails in a row, rendering us bankrupt, a small but non-negligible chance. The point of this example is that even with a positive edge and a positive expected payout of \$0.02. there is a material probability of ruin risk. This begs the question, \textbf{how can we lock in the guaranteed \$0.02 edge?}. As an individual player, this is an impossibility but what if we had a team?
+
+Suppose we had 100 friends who had access to the same the game, meaning we had 100 indepedent, similarly biased coins. Upon the first flip, not only do we have 100 outcomes, we should have 100 outcomes distributed according to the probabiliy of the coins, i.e. 49 Tails and 51 heads resulting in a net payout of \$2.  Given that we have 100 co-conspirators, the individual payout is \$0.02 per game in line with our earlier calculation. We have simply demonstrated a key concept in statistics, namely the law of large numbers, i.e. we can attain the expected average in the limit of a large number of independent experiments. 
+
+Armed with this knowledge, you decide to grow your operation. Within the same casino, we now search for other games with edge. Perhaps we notice that the  baccarat tables tend to show notably more player wins than banker wins, or perhaps the roulette tables have biased wheels favoring black over red. We can then employ our same friends in the same way to lock in guaranteed profits.  
+
+But why stop there, we can furhter expand this endeavor to other casinos in the country and in fact all over the world. We now have a global operation specializing in gambling arbitrarge; A very profitable business indeed.  If you've undersood this example, then you understand the broad strokes of systematic trading. We're edge hunters, operating in the biggest casino in the world ... the trading markets.
+
+ 
+\subsection{What are Factors?}
+Factors can be thought of as explainers of returns for an asset class. Mathematically we're asserting the claim that
+\begin{align}
+returns(t) & = unexplained\ returns(t)+ factor_1(t) + factor_2(t)  + factor_3(t)
+\end{align}
+where we have assumed we have only 3 factors. In the case of FX markets, three possible factors are: (1) broad dollar (DXY index) (2) carry factor and (3) momentum factor.
+
+
+\subsection{Why do Factors work?}
+
+\subsection{Risk Management}
+
+\subsection{Diversification - the only free lunch}
+
+\subsection{Why and when do models work}
+
 
 
 \section{Resources}
+
 I require a lean team with 2 additional permanent headcounts and a junior rotator. They must have STEM backgrounds and demonstrate strong development skills.
 \begin{itemize}
 \item 1 Quantitative Researcher - VP level
@@ -41,26 +111,111 @@ I require a lean team with 2 additional permanent headcounts and a junior rotato
 \item 1 Quantitative Analyst. 
 \item 1 intern/ rotator with STEM background
 \end{itemize}
+The perfect quant would be an expert in all 
+\SkillSpectrumTable
 
+I currently have two top quality candidates in mind. They are in my opinion undervalued for the amount of research bandwidth they can bring to a quantitative research team. Both candidates have PhDs and have worked directly with me at previous shops. Hence I have a first hand experience and assessment of their calibre. Both have experience carrying out systematic trading research as well and are excellent hires.
 
 
 \section{Proposed Organization Chart}
-Given the asset class coverage, it makes sense for this team to report into both Greg Debienne and Jason Ince. Between both business heads, we have access to all business classes. We could report into the Credit Trading Prop Desk which is also in need of quant help. We could help supervise rotators on their behalf to achieve their needs.
+Given the asset class coverage, it makes sense for this team to report into both FX Trading and Global Equity Derivatives given its eligibility to trade all asset classes according to their respective trading permissions. The Alpha Quant team could be viewed as a sibling team to the Credit Prop Trading Desk which is currently fundamentals-based and hence ripe for systematic enhancement.
+
+\section{Funding the team}
+The Alpha Quant team can be viewed as a start up venture for the various business lines and participate in a profit sharing structure directly proportional to the amount of risk contributed. For example, suppose the strategies have a max annual risk appetite of \$100mn\footnote{Note that \$100mn of risk does not imply \$100mio of notional. It would depend on the volatility of the various asset classes in the portfolio. Suppose we invest primarily in FX spot which has a volatility of 10\% then that would imply a portfolio notional size of \$1bio to achieve that amount of risk. Assuming an average margin requiment of 30x, as is typicaly for FX futures, then the actual margin required is simply \$33.3 mio per year, giving us a sufficient buffer. } and FX trading and GED decides to risk \$60mn and \$ 40 mn respectively. Then this would imply a 60\% and  40\% split of profits after costs. The goal of the team is to be profitable and self-fuinding for the dealer after a 2\%/20\% of fee structure.
+
+
+\section{Project Milestones}
+To build out a successful systematic program and to run an efficient research team, there will be an initial investment of time in the data and systems infrastructure.
+Work can done extremely fast and we will make visible progress on a weekly - biweekly basis. Below is an outline of what needs to be done. 
+\newpage
+\subsection{Data Infrastructure}
+\begin{enumerate}
+\item Build out in-house data base to store raw market data: macroeconomic, spot and futures data. 
+\item Build out futures roll engine
+\item Build out in-house system to store customized data: backtest results, positions and trading weights etc.
+\end{enumerate}
+
+\subsection{Signals Infrastructure}
+\begin{enumerate}
+\item Trading signals construction system.
+\item Trading signals diagnostics system 
+\item Alpha capture system
+\end{enumerate}
+
+\subsection{Backtesting Infrastructure}
+\begin{enumerate}
+\item Build out a volatility-targeted futures backtesting system
+\item Include realistic transaction costs and all manners of auxillary data
+\end{enumerate}
+
+
+\subsection{Order Management Infrastructure}
+\begin{enumerate}
+\item Build out system that sends rebalance orders to Neovest via APIs, thereby eliminaating need for dedicated trader.
+\end{enumerate}
+
+\subsection{Dashboard infrastructure}
+A web based dashboard with various analytics
+\begin{enumerate}
+\item Manage daily risks and PL
+\item Manage futures roll strategy
+\item Keep track of database systems
+\end{enumerate}
+
+
+\begin{table}
+\begin{tabular}{|c|c|}
+    \hline
+    \textbf{Section} & \textbf{Description} \\ \hline
+    7.1 Data Infrastructure &
+    \begin{itemize}
+        \item Build out in-house database to store raw market data: macroeconomic, spot, and futures data.
+        \item Build out futures roll engine.
+        \item Build out in-house system to store customized data: backtest results, positions, trading weights, etc.
+    \end{itemize} \\ \hline
+    7.2 Signals Infrastructure &
+    \begin{itemize}
+        \item Trading signals construction system.
+        \item Trading signals diagnostics system.
+        \item Alpha capture system.
+    \end{itemize} \\ \hline
+    7.3 Backtesting Infrastructure &
+    \begin{itemize}
+        \item Build out a volatility-targeted futures backtesting system.
+        \item Include realistic transaction costs and all manners of auxiliary data.
+    \end{itemize} \\ \hline
+    7.4 Order Management Infrastructure &
+    \begin{itemize}
+        \item Build out a system that sends rebalance orders to Neovest via APIs, thereby eliminating the need for a dedicated trader.
+    \end{itemize} \\ \hline
+    7.5 Dashboard Infrastructure &
+    A web-based dashboard with various analytics:
+    \begin{itemize}
+        \item Manage daily risks and P&L.
+        \item Manage futures roll strategy.
+        \item Keep track of database systems.
+    \end{itemize} \\ \hline
+\end{tabular}
+\end{table}
+
+
+Note that while it seems like a huge undertaking, I have already spent some time working on all the systems and at this point need extra hands for validation and improvemnets of the systems. 
 
 
 \section{A Win For Everyone}
 
 \subsection{Strategy}
-In general, the strategy team has a need for quant resources but not quant visionaries. The business of strategy is heavily focused around story-telling via reports versus taking risk. It's clear then that they do not need idea generation quants but instead quants to execute their vision. Their needs can be met with junior quants and interns and I feel comfortable leaving the team. In FX Strategy for example, Linda has been sufficiently well trained.
+In general, the strategy team has a need for quant resources but not quant visionaries. The business of strategy is heavily focused around story-telling via reports versus taking risk. It's clear then that they do not need idea generation quants but instead quants to execute their vision. Their needs can be met with junior quants and interns and I feel comfortable leaving the team. In FX Strategy for example, Linda has been sufficiently well trained and should be capable of producing anecdotal charts and sell-side quant research for Mark.
 
 %Mark has ambition to lead quant research. We have different visions of quant research and it doesn't make sense to have two different visions. It is only sensible for me to focus on trading instead of being a generalist. In previous renditions of my vision of Quant Research, I wanted to ensure that FX Strategy would not lose suppose. Linda has been adequately trained which will allow Mark to drive the vision through 
-\subsection{Trading}
+\subsubsection{Trading}
+Diversifcation of revenue. Also have a proper research team to 
+
 \subsubsection{FX Trading}
 No one in the bank is trading futures meaningfully and so it is an untapped space. Given that we only make recommendations to clients and to the desk on spot FX, there isn't a conflict of interest. This also does not compete with other areas of FX business. 
 
 \subsubsection{Credit Trading}
-Our Credit desk is fundamental in nature. It primarily runs a basis package strategy, i.e. simultaneously long the HY bond and the CDS to eliminate default risk. There is strong interest among the team to explore systematic alpha in the credit space. The team has basic needs for quant suppors, which are not being met. We could provide our quant expertise and manage their intern/ rotator for them, thereby filling that need. We could also get access to another asset class to further diversify our portfolio.
-
+Our Credit desk is fundamental in nature. It primarily runs a basis package strategy, i.e. simultaneously long the HY bond and the CDS to eliminate default risk. There is strong interest among the team to explore systematic alpha in the credit space. The team has basic needs for quant supports, which are not being met. We could provide our quant expertise and manage their intern/ rotator for them, thereby filling that need. We could also get access to another asset class to further diversify our portfolio.
 
 \subsubsection{Funding}
 Trading futures allows for large margin and there will be no ambiguity in terms of marking the book. It is also a low margin business with some FX contracts offering over 40 times leverage.
@@ -71,21 +226,37 @@ Futures is a highly liquid space and the strategy will have massive capacity giv
 \subsubsection{Global Client Solutions}
 Mastering the mechanics of futures trading and portfolio rebalancing will be integral in the possibility of a future QIS business lines.
 
-
 \subsubsection{Talent Acquisition}
-TD will have no problem attracting talent with such a quant systematic futures program.
+TD will have no problem attracting talent on Bay St with such a quant systematic futures program.
+
+\subsubsection{Business Leaders}
+Usher in a new paradigm of using quant within TD. A quant team that does proper quant research and is more revenue generating. 
+
+\subsubsection{Low overhead}
+Team is a set it and forget it type of team. No need for daily management and only require well-defined risk limits. 
 
 
 
 
-\section{Sub projects}
+
+
+
+\section{Expansion Projects}
 \begin{enumerate}
-\item Mid frequency strategies.
+\item Quantamental framework for FX/ Credit trading.
+\item Mid frequency systematic futures strategies
+\item Market microstructure research for better execution.
 \item Monetizing retail order flow.
-\item Systematic options
-\item Systematic forward trading
+\item Systematic options trading
+\item Systematic forward/ FX swaps program
+\item Systematic credit portfolio
 \item Tactical roll yield strategy
-%\item Quantamenta tactical portfolio
+\end{enumerate}
+
+\section{Outs}
+\begin{enumerate}
+\item Quantamental Investment Strategies (QIS) book
+\item Retain top quant talent
 \end{enumerate}
 
 
